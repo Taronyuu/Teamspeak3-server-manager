@@ -1,3 +1,4 @@
+/storage/database.sqlite
 /vendor
 /node_modules
 Homestead.yaml
