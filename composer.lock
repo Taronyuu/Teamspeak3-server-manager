@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5c6026b96e6fa11a641b51a6ba976f5e",
-    "content-hash": "5bd58fd976f1ee3e9611bc37c006ec46",
+    "hash": "ee97439006c1b06bed483b2994fcbd2e",
+    "content-hash": "690ef1bcf37cf24d639c08ef5d7ecdcf",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -840,6 +840,45 @@
                 "random"
             ],
             "time": "2016-02-06 03:52:05"
+        },
+        {
+            "name": "planetteamspeak/ts3-php-framework",
+            "version": "1.1.23",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mdoelker/ts3-php-framework.git",
+                "reference": "df1ca20abfd1fc6a9c01dd0fc91fb32132518706"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mdoelker/ts3-php-framework/zipball/df1ca20abfd1fc6a9c01dd0fc91fb32132518706",
+                "reference": "df1ca20abfd1fc6a9c01dd0fc91fb32132518706",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "libraries/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Sven 'ScP' Paulsen"
+                }
+            ],
+            "description": "Initially released in January 2010, the TS3 PHP Framework is a powerful, open source, object-oriented framework implemented in PHP 5 and licensed under the GNU General Public License. It's based on simplicity and a rigorously tested agile codebase. Extend the functionality of your servers with scripts or create powerful web applications to manage all features of your TeamSpeak 3 Server instances.",
+            "homepage": "http://addons.teamspeak.com/directory/tools/integration/TeamSpeak-3-PHP-Framework.html",
+            "keywords": [
+                "teamspeak"
+            ],
+            "time": "2013-10-17 10:10:03"
         },
         {
             "name": "psr/log",
