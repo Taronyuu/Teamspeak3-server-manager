@@ -1,27 +1,35 @@
-## Laravel PHP Framework
+# Teamspeak 3 server manager
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+### What is it?
+Teamspeak 3 server manager is a simple web application built on Laravel to let users manage their own Teamspeak servers. Its currently fairly new and it still needs allot of work. But the basics are working.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+### What does it do?
+Right now it lets you create, delete and edit servers. You can start, stop and restart them. Edit their configuration. Create and delete tokens. And check how many people are online. All from your own server.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+### Requirements
+Its built on Laravel 5.1 LTS. So atleast PHP 5.5.9. You also need a webserver. If it isn't local you should make sure your teamspeak server's query port is exposed to the internet. (Recommended is to run it locally)
 
-## Official Documentation
+### Installation
+The setup is pretty simple:
+- Clone this repo somewhere (Make sure you have git installed, or download the zip)
+    `git clone https://github.com/Taronyuu/Teamspeak3-server-manager.git`
+- Run composer install
+    `composer install`
+- Install a teamspeak server somewhere and start it. Doing this is outside the scope of this readme file.
+- Set the required values in the `.env` file. You can copy them from the `.env.example` file.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
-## Contributing
+    TS_USERNAME=serveradmin
+    TS_PASSWORD={Your serveradmin password}
+    TS_SERVER_IP=127.0.0.1
+    TS_SERVER_PORT=10011
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+-   Run `php artisan migrate:refresh` to update the sqlite file with the right columns
+-   Run `php artisan teamspeak:reset` to remove all existing Teamspeak servers. This is because at the moment there is no sync option. ***THIS DOES REMOVE ALL EXISTING SERVERS.***
+-   Go to `yoururl.com/install` and create a new user.
+-   Click on an item in the left sidebar and you will be asked to login.
+-   Login
+-   Enjoy
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+### Can you add.... ?
+Ofcourse! Please open an issue or send me a message. I'll be more than happy to add features whenever I have time. :)
