@@ -24,6 +24,8 @@ The setup is pretty simple:
     TS_SERVER_IP=127.0.0.1
     TS_SERVER_PORT=10011
 
+-   Make sure `DB_CONNECTION=sqlite` is set to sqlite!
+-   Create an empty file named `database.sqlite` in the storage folder. (so `storage/database.sqlite`). If you are on Linux use `touch storage/database.sqlite`.
 -   Run `php artisan migrate:refresh` to update the sqlite file with the right columns
 -   Run `php artisan teamspeak:reset` to remove all existing Teamspeak servers. This is because at the moment there is no sync option. ***THIS DOES REMOVE ALL EXISTING SERVERS.***
 -   Go to `yoururl.com/install` and create a new user.
