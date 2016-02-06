@@ -5,6 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            @include('partials.messages')
             <div class="panel panel-green">
                 <div class="panel-heading">
                     <div class="row">

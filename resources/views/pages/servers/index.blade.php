@@ -5,6 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            @include('partials.messages')
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped">
                     <thead>
@@ -31,6 +32,11 @@
                     </tbody>
                 </table>
             </div>
+            @if(!$servers->count())
+                <div class="alert alert-info">
+                    You don't have any servers yet. Click <a href="{{ action('ServerController@create') }}">here</a> to create one.
+                </div>
+            @endif
         </div>
     </div>
 @endsection

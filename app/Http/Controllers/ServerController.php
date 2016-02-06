@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TeamspeakHelper;
 use App\Models\Server;
+use App\Models\Token;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -10,6 +12,13 @@ use App\Http\Controllers\Controller;
 
 class ServerController extends Controller
 {
+
+    protected $teamspeak;
+
+    public function __construct(TeamspeakHelper $teamspeak){
+        $this->teamspeak = $teamspeak;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,9 +47,25 @@ class ServerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\PostAndPutCreateServerRequest $request)
     {
-        //
+        $server = Server::create($request->all());
+        $teamspeakServer = $this->teamspeak->createServer($server);
+
+        $data = [
+            'sid'   => $teamspeakServer['sid'],
+            'port'  => $teamspeakServer['virtualserver_port'],
+            'ip'    => env('TS_SERVER_IP')
+        ];
+        $server->update($data);
+
+        $tokenData = [
+            'server_id' => $server->id,
+            'token'     => $teamspeakServer['token']
+        ];
+        Token::create($tokenData);
+
+        return redirect()->action('ServerController@index')->with('success', 'Message successfully created');
     }
 
     /**

@@ -15,10 +15,10 @@ class CreateServersTable extends Migration
         Schema::create('servers', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('sid');
+            $table->integer('sid')->nullable();
             $table->string('name');
-            $table->string('ip');
-            $table->integer('port');
+            $table->string('ip')->nullable();
+            $table->integer('port')->nullable();
             $table->integer('slots');
 
             $table->timestamps();
