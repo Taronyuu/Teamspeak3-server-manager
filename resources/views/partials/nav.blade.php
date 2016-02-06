@@ -12,5 +12,8 @@
         <li @if(Request::is('servers/create')) class="active" @endif>
             <a href="{{ action('ServerController@create') }}"><i class="fa fa-fw fa-plus"></i> Create server</a>
         </li>
+        <li>
+            <a href="{{ action('Auth\AuthController@getLogout') }}"><i class="fa fa-fw fa-sign-out"></i> Logout</a>
+        </li>
     </ul>
 </div>
