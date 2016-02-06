@@ -35,3 +35,8 @@ The setup is pretty simple:
 
 ### Can you add.... ?
 Ofcourse! Please open an issue or send me a message. I'll be more than happy to add features whenever I have time. :)
+
+### Screens
+![Server overview](https://snapr.pw/i/86e627f677.png "Server overview")
+
+![Menu](https://snapr.pw/i/bd64f1594e.png "Menu")

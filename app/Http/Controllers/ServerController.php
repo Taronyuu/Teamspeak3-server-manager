@@ -65,7 +65,7 @@ class ServerController extends Controller
         ];
         Token::create($tokenData);
 
-        return redirect()->action('ServerController@index')->with('success', 'Message successfully created');
+        return redirect()->action('ServerController@index')->with('success', 'Server successfully created');
     }
 
     /**
