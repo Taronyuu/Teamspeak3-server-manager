@@ -16,7 +16,6 @@ class CreateServersTable extends Migration
             $table->increments('id');
 
             $table->integer('sid');
-            $table->integer('user_id');
             $table->string('name');
             $table->string('ip');
             $table->integer('port');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Server;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -16,7 +17,9 @@ class ServerController extends Controller
      */
     public function index()
     {
-        //
+        $servers = Server::all();
+
+        return view('pages.servers.index', compact('servers'));
     }
 
     /**
@@ -26,7 +29,7 @@ class ServerController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.servers.create');
     }
 
     /**
