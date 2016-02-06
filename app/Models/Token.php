@@ -11,4 +11,9 @@ class Token extends Model
         'server_id',
         'token'
     ];
+
+    public function server()
+    {
+        return $this->belongsTo(Server::class);
+    }
 }

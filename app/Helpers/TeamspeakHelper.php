@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Server;
+use App\Models\Token;
 use Illuminate\Database\Eloquent\Model;
 
 class TeamspeakHelper
@@ -15,8 +16,13 @@ class TeamspeakHelper
         $this->instance = \TeamSpeak3::factory("serverquery://" . env('TS_USERNAME') .":" . env('TS_PASSWORD') . "@" . env('TS_SERVER_IP') . ":" . env('TS_SERVER_PORT'));
     }
 
+    public function getInstance()
+    {
+        return $this->instance;
+    }
+
     public function server(Server $server){
-        return \TeamSpeak3::factor("serverquery://" . env('TS_USERNAME') .":" . env('TS_PASSWORD') . "@" . env('TS_SERVER_IP') . ":" . env('TS_SERVER_PORT') . "/?server_port=" . $server->port . "&use_offline_as_virtual=1");
+        return \TeamSpeak3::factory("serverquery://" . env('TS_USERNAME') .":" . env('TS_PASSWORD') . "@" . env('TS_SERVER_IP') . ":" . env('TS_SERVER_PORT') . "/?server_port=" . $server->port . "&use_offline_as_virtual=1");
     }
 
     public function createServer(Server $server)
@@ -59,7 +65,7 @@ class TeamspeakHelper
         return $result;
     }
 
-    public function startServer($server)
+    public function startServer(Server $server)
     {
         $result = $this->instance->serverStart([
             'sid' => $server->sid
@@ -68,7 +74,7 @@ class TeamspeakHelper
         return $result;
     }
 
-    public function stopServer($server)
+    public function stopServer(Server $server)
     {
         $result = $this->instance->serverStop([
             'sid' => $server->sid
@@ -77,7 +83,7 @@ class TeamspeakHelper
         return $result;
     }
 
-    public function resetToken($server, $channel = "Server Admin")
+    public function resetToken(Server $server, $channel = "Server Admin")
     {
         $virtualServer = $this->server($server);
         $arr_ServerGroup = $virtualServer->serverGroupGetByName("Server Admin");
@@ -85,21 +91,27 @@ class TeamspeakHelper
         return $token;
     }
 
-    public function deleteToken($server, $token)
+    public function deleteToken(Server $server, Token $token)
     {
         $virtualServer = $this->server($server);
         return $virtualServer->privilegeKeyDelete($token->token);
     }
 
-    public function updateConfiguration($server, $data)
+    public function updateConfiguration(Server $server, $data)
     {
         $server = $this->server($server);
         return $server->modify($data);
     }
 
-    public function getOnlineUsers($server)
+    public function getOnlineUsers(Server $server)
     {
         $server = $this->server($server);
         return $server->clientCount();
+    }
+
+    public function getServer($server)
+    {
+        $server = $this->server($server);
+        return $server;
     }
 }

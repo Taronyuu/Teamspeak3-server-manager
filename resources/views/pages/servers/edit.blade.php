@@ -1,9 +1,9 @@
 @extends('app')
 
-@section('page_title', 'Create server')
+@section('page_title', 'Edit server')
 
 @section('content')
-    {!! Form::open(['action' => 'ServerController@store', 'method' => 'post', 'role' => 'form']) !!}
+    {!! Form::model($server, ['action' => ['ServerController@update', $server], 'method' => 'put', 'role' => 'form']) !!}
     <div class="row">
         @include('partials.messages')
         <div class="col-md-6">

@@ -11,4 +11,9 @@ class Log extends Model
         'server_id',
         'action'
     ];
+
+    public function server()
+    {
+        return $this->belongsTo(Server::class);
+    }
 }

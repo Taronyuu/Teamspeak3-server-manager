@@ -76,7 +76,13 @@ class ServerController extends Controller
      */
     public function show($id)
     {
-        //
+        $server = Server::findOrFail($id);
+
+        $virtualServer = (new TeamspeakHelper())->getServer($server);
+        $viewer = $virtualServer->getViewer(new \TeamSpeak3_Viewer_Html("/images/viewer/", "/images/flags/", "data:image"));
+        $clientCount = $virtualServer->clientCount();
+
+        return view('pages.servers.show', compact('server', 'viewer', 'clientCount'));
     }
 
     /**
@@ -87,7 +93,9 @@ class ServerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $server = Server::findOrFail($id);
+
+        return view('pages.servers.edit', compact('server'));
     }
 
     /**
@@ -97,9 +105,13 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\PostAndPutCreateServerRequest $request, $id)
     {
-        //
+        $server = Server::findOrFail($id);
+        $server->update($request->all());
+        $this->teamspeak->updateServer($server);
+
+        return redirect()->action('ServerController@show', $server)->with('success', 'Server has been edited');
     }
 
     /**
@@ -110,6 +122,119 @@ class ServerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $server = Server::findOrFail($id);
+
+        if($server->status){
+            return redirect()->back()->with('error', 'Can\'t delete your server when it is running');
+        }
+
+        $this->teamspeak->deleteServer($server);
+        $server->delete();
+
+        return redirect()->action('ServerController@index')->with('success', 'Server has been deleted');
+    }
+
+    public function start($id)
+    {
+        $server = Server::findOrFail($id);
+
+        if($server->status){
+            return redirect()->back()->with('error', 'Can\'t start a running server');
+        }
+
+        (new TeamspeakHelper())->startServer($server);
+
+        return redirect()->back()->with('success', 'Server has been started');
+    }
+
+    public function restart($id)
+    {
+        $server = Server::findOrFail($id);
+        $teamspeak = new TeamspeakHelper();
+
+        if($server->status){
+            $teamspeak->stopServer($server);
+        }
+
+        $teamspeak->startServer($server);
+
+
+        return redirect()->back()->with('success', 'Server has been started');
+    }
+
+    public function stop($id)
+    {
+        $server = Server::findOrFail($id);
+
+        if(!$server->status){
+            return redirect()->back()->with('error', 'Can\'t stop a server that isn\'t running');
+        }
+
+        (new TeamspeakHelper())->stopServer($server);
+
+        return redirect()->back()->with('success', 'Server has been stopped');
+    }
+
+    public function resetToken($id)
+    {
+        $server = Server::findOrFail($id);
+
+        $token = (new TeamspeakHelper())->resetToken($server);
+        $data = [
+            'server_id' => $server->id,
+            'token'     => $token
+        ];
+        $token = Token::create($data);
+
+        return redirect()->action('ServerController@showTokens', $server)->with('success', 'Token has been created');
+    }
+
+    public function showTokens($id)
+    {
+        $server = Server::findOrFail($id);
+        $tokens = $server->tokens;
+
+        return view('pages.servers.tokens', compact('tokens', 'server'));
+    }
+
+    public function deleteToken($id, $token_id)
+    {
+        $server = Server::findOrFail($id);
+        $token  = Token::findOrFail($token_id);
+        (new TeamspeakHelper())->deleteToken($server, $token);
+        $token->delete();
+
+        return redirect()->back()->with('success', 'Token has been deleted');
+    }
+
+    public function showConfigure($id)
+    {
+        $server = Server::findOrFail($id);
+        $virtualServer = (new TeamspeakHelper())->getServer($server);
+
+        $serverData = [
+            'virtualserver_name' => (string)$virtualServer['virtualserver_name'],
+            'virtualserver_welcomemessage' => (string)$virtualServer['virtualserver_welcomemessage'],
+            'virtualserver_password' => "",
+            'virtualserver_hostbanner_url' => (string)$virtualServer['virtualserver_hostbanner_url'],
+            'virtualserver_hostbanner_gfx_url' => (string)$virtualServer['virtualserver_hostbanner_gfx_url'],
+            'virtualserver_hostbutton_tooltip' => (string)$virtualServer['virtualserver_hostbutton_tooltip'],
+            'virtualserver_hostbutton_gfx_url' => (string)$virtualServer['virtualserver_hostbutton_gfx_url'],
+            'virtualserver_hostbutton_url' => (string)$virtualServer['virtualserver_hostbutton_url'],
+        ];
+
+        return view('pages.servers.configure', compact('server', 'virtualServer', 'serverData'));
+    }
+
+    public function postConfigure($id, Request $request)
+    {
+        $server = Server::findOrFail($id);
+        $data = $request->all();
+        if(array_key_exists('_token', $data)){
+            unset($data['_token']);
+        }
+        $result = (new TeamspeakHelper())->updateConfiguration($server, $data);
+
+        return redirect()->action('ServerController@show', $server)->with('success', 'Server successfully updated');
     }
 }
