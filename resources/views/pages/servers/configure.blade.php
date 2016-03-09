@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('page_title', 'Create server')
+@section('page_title', 'Configure server')
 
 @section('content')
     <div class="row">
