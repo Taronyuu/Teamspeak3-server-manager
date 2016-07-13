@@ -13,10 +13,7 @@ Its built on Laravel 5.1 LTS. So atleast PHP 5.5.9. You also need a webserver. I
 The setup is pretty simple:
 - Clone this repo somewhere (Make sure you have git installed, or download the zip)
     `git clone https://github.com/Taronyuu/Teamspeak3-server-manager.git`
-- Run composer install
-    `composer install`
-- Install a teamspeak server somewhere and start it. Doing this is outside the scope of this readme file.
-- Set the required values in the `.env` file. You can copy them from the `.env.example` file.
+- Set the required values in the `.env` file. You can copy them from the `.env.example` file. (Create the `.env` file if it does not exist by copying the `.env.example` file)
 
 
     TS_USERNAME=serveradmin
@@ -24,6 +21,9 @@ The setup is pretty simple:
     TS_SERVER_IP=127.0.0.1
     TS_SERVER_PORT=10011
 
+- Run composer install
+    `composer install`
+- Install a teamspeak server somewhere and start it. Doing this is outside the scope of this readme file.
 -   Make sure `DB_CONNECTION=sqlite` is set to sqlite!
 -   Create an empty file named `database.sqlite` in the storage folder. (so `storage/database.sqlite`). If you are on Linux use `touch storage/database.sqlite`.
 -   Run `php artisan migrate:refresh` to update the sqlite file with the right columns
