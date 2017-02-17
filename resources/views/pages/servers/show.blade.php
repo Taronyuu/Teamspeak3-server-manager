@@ -7,7 +7,6 @@
         @include('partials.messages')
         <div class="col-lg-6">
             <div class="panel panel-default">
-                <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -31,9 +30,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.table-responsive -->
                 </div>
-                <!-- /.panel-body -->
             </div>
         </div>
         <div class="col-lg-6">
@@ -47,7 +44,6 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="panel panel-default">
-                <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -88,13 +84,34 @@
                             <tr>
                                 <td><a href="{{ action('ServerController@showConfigure', $server) }}" class="btn btn-primary" style="width: 100%;"><i class="fa fa-cog"></i> Configure server</a></td>
                             </tr>
+                            <tr>
+                                <td>
+                                    {!! Form::open(['method' => 'DELETE', 'action' => ['ServerController@destroy', $server]]) !!}
+                                    <button type="button" class="btn btn-danger btn-block" onclick="deleteEntity(this, '{{ addslashes($server->name) }}')">
+                                        <i class="fa fa-trash"></i> Delete server
+                                    </button>
+                                    {!! Form::close() !!}
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.table-responsive -->
                 </div>
-                <!-- /.panel-body -->
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script>
+        function deleteEntity(element, subject) {
+            var r = confirm("Are you sure you want to delete the server " + subject + "?");
+
+            if (r == true) {
+                $(element).closest('form').submit();
+            }
+
+            return;
+        }
+    </script>
 @endsection

@@ -15,7 +15,8 @@ class ServerController extends Controller
 
     protected $teamspeak;
 
-    public function __construct(TeamspeakHelper $teamspeak){
+    public function __construct(TeamspeakHelper $teamspeak)
+    {
         $this->teamspeak = $teamspeak;
     }
 
@@ -44,7 +45,8 @@ class ServerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Requests\PostAndPutCreateServerRequest $request)
@@ -53,16 +55,18 @@ class ServerController extends Controller
         $teamspeakServer = $this->teamspeak->createServer($server);
 
         $data = [
-            'sid'   => $teamspeakServer['sid'],
-            'port'  => $teamspeakServer['virtualserver_port'],
-            'ip'    => env('TS_SERVER_IP')
+            'sid' => $teamspeakServer['sid'],
+            'port' => $teamspeakServer['virtualserver_port'],
+            'ip' => env('TS_SERVER_IP')
         ];
+
         $server->update($data);
 
         $tokenData = [
             'server_id' => $server->id,
-            'token'     => $teamspeakServer['token']
+            'token' => $teamspeakServer['token']
         ];
+
         Token::create($tokenData);
 
         return redirect()->action('ServerController@index')->with('success', 'Server successfully created');
@@ -71,7 +75,8 @@ class ServerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -88,7 +93,8 @@ class ServerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -101,8 +107,9 @@ class ServerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Requests\PostAndPutCreateServerRequest $request, $id)
@@ -117,17 +124,19 @@ class ServerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $server = Server::findOrFail($id);
 
-        if($server->status){
+        if ($server->status) {
             return redirect()->back()->with('error', 'Can\'t delete your server when it is running');
         }
 
+        $this->teamspeak->stopServer($server);
         $this->teamspeak->deleteServer($server);
         $server->delete();
 
@@ -138,7 +147,7 @@ class ServerController extends Controller
     {
         $server = Server::findOrFail($id);
 
-        if($server->status){
+        if ($server->status) {
             return redirect()->back()->with('error', 'Can\'t start a running server');
         }
 
@@ -152,7 +161,7 @@ class ServerController extends Controller
         $server = Server::findOrFail($id);
         $teamspeak = new TeamspeakHelper();
 
-        if($server->status){
+        if ($server->status) {
             $teamspeak->stopServer($server);
         }
 
@@ -166,7 +175,7 @@ class ServerController extends Controller
     {
         $server = Server::findOrFail($id);
 
-        if(!$server->status){
+        if (!$server->status) {
             return redirect()->back()->with('error', 'Can\'t stop a server that isn\'t running');
         }
 
@@ -182,7 +191,7 @@ class ServerController extends Controller
         $token = (new TeamspeakHelper())->resetToken($server);
         $data = [
             'server_id' => $server->id,
-            'token'     => $token
+            'token' => $token
         ];
         $token = Token::create($data);
 
@@ -200,7 +209,7 @@ class ServerController extends Controller
     public function deleteToken($id, $token_id)
     {
         $server = Server::findOrFail($id);
-        $token  = Token::findOrFail($token_id);
+        $token = Token::findOrFail($token_id);
         (new TeamspeakHelper())->deleteToken($server, $token);
         $token->delete();
 
@@ -230,7 +239,7 @@ class ServerController extends Controller
     {
         $server = Server::findOrFail($id);
         $data = $request->all();
-        if(array_key_exists('_token', $data)){
+        if (array_key_exists('_token', $data)) {
             unset($data['_token']);
         }
         $result = (new TeamspeakHelper())->updateConfiguration($server, $data);
