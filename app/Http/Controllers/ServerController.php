@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\TeamspeakHelper;
-use App\Models\Server;
 use App\Models\Token;
+use App\Models\Server;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use App\Helpers\TeamspeakHelper;
+use App\Http\Requests\ServerRequest;
 
 class ServerController extends Controller
 {
-
     protected $teamspeak;
 
     public function __construct(TeamspeakHelper $teamspeak)
@@ -27,7 +24,7 @@ class ServerController extends Controller
      */
     public function index()
     {
-        $servers = Server::all();
+        $servers = Server::latest()->paginate();
 
         return view('pages.servers.index', compact('servers'));
     }
@@ -45,11 +42,11 @@ class ServerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\ServerRequest $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\PostAndPutCreateServerRequest $request)
+    public function store(ServerRequest $request)
     {
         $server = Server::create($request->all());
         $teamspeakServer = $this->teamspeak->createServer($server);
@@ -107,12 +104,12 @@ class ServerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \App\Http\Requests\ServerRequest $request
+     * @param  int                             $id
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\PostAndPutCreateServerRequest $request, $id)
+    public function update(ServerRequest $request, $id)
     {
         $server = Server::findOrFail($id);
         $server->update($request->all());

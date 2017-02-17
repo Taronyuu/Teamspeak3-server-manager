@@ -18,7 +18,8 @@ class DashboardController extends Controller
     public function index()
     {
         $server_count = Server::count();
+        $slots_count = Server::sum('slots');
 
-        return view('pages.dashboard', compact('server_count'));
+        return view('pages.dashboard', compact('server_count', 'slots_count'));
     }
 }
