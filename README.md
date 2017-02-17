@@ -33,10 +33,20 @@ The setup is pretty simple:
 -   Login
 -   Enjoy
 
+### Additional commands
+We provide a small number of commands which you can use to complete your panel.
+
+Command: `php artisan teamspeak:reset`
+Description: **DANGEROUS** command, this will remove **all** your teamspeak server from the teamspeak 3 instance and database.
+
+Command: `php artisan teamspeak:sync`
+Description: This command will synchronize all the servers with your database and the teamspeak 3 instance itself.
+
 ### Can you add.... ?
 Ofcourse! Please open an issue or send me a message. I'll be more than happy to add features whenever I have time. :)
 
 ### Screens
+
 ![Server overview](https://snapr.pw/i/86e627f677.png "Server overview")
 
 ![Menu](https://snapr.pw/i/bd64f1594e.png "Menu")
