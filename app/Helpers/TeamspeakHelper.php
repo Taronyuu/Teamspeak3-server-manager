@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use App\Models\Server;
 use App\Models\Token;
-use Illuminate\Database\Eloquent\Model;
 
 class TeamspeakHelper
 {
