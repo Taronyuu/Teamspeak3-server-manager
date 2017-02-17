@@ -17,6 +17,8 @@ class Server extends Model
         'slots'
     ];
 
+    protected $perPage = 20;
+
     private $status;
 
     public function getStatusAttribute()
