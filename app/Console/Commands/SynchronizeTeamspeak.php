@@ -44,9 +44,6 @@ class SynchronizeTeamspeak extends Command
      */
     public function handle()
     {
-        Server::truncate();
-        Token::truncate();
-
         $serverInstance = $this->teamspeak->getInstance();
         foreach ($serverInstance as $key => $virtualServer) {
             /* @var $virtualServer \TeamSpeak3_Node_Server */
