@@ -22,7 +22,7 @@ class SynchronizeTeamspeak extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Synchronize Teamspeak 3 servers with your instance and database.';
 
     protected $teamspeak;
 
