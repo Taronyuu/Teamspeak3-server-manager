@@ -39,6 +39,7 @@ class TeamspeakHelper
     {
         $server = $this->server($server);
         $result = $server->getProperty("virtualserver_status");
+
         if($result == 'online'){
             return true;
         }

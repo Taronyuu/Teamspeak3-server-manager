@@ -3,7 +3,6 @@
 <head>
     @include('partials.header')
 </head>
-
 <body>
 <div id="wrapper">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -11,7 +10,6 @@
     </nav>
 
     <div id="page-wrapper">
-
         <div class="container-fluid">
 
             @include('partials.page_header')
@@ -20,11 +18,11 @@
 
         </div>
     </div>
-
 </div>
 
 @include('partials.footer')
 
-</body>
+@yield('javascript')
 
+</body>
 </html>
