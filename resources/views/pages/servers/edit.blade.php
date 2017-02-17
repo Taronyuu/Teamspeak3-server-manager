@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                {!! Form::submit('Create', ['class' => 'btn btn-primary', 'style' => 'width: 100%']) !!}
+                {!! Form::submit('Save', ['class' => 'btn btn-primary', 'style' => 'width: 100%']) !!}
             </div>
         </div>
     </div>
