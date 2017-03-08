@@ -68,6 +68,7 @@ class SynchronizeTeamspeak extends Command
                         $tokens[$key]['created_at'] = date('Y-m-d H:i:s', $item['token_created']);
                     }
                 } catch (\Exception $exception) {
+                    //
                 }
 
                 $server = Server::create([
@@ -108,7 +109,7 @@ class SynchronizeTeamspeak extends Command
                         $tokens[$key]['created_at'] = date('Y-m-d H:i:s', $item['token_created']);
                     }
                 } catch (\Exception $exception) {
-
+                    //
                 }
 
                 $server->update([

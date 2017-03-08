@@ -81,7 +81,11 @@ class ServerController extends Controller
         $server = Server::findOrFail($id);
 
         $virtualServer = (new TeamspeakHelper())->getServer($server);
-        $viewer = $virtualServer->getViewer(new \TeamSpeak3_Viewer_Html("/images/viewer/", "/images/flags/", "data:image"));
+        $viewer = $virtualServer->getViewer(new \TeamSpeak3_Viewer_Html(
+            "/images/viewer/",
+            "/images/flags/",
+            "data:image"
+        ));
         $clientCount = $virtualServer->clientCount();
 
         return view('pages.servers.show', compact('server', 'viewer', 'clientCount'));
@@ -239,7 +243,7 @@ class ServerController extends Controller
         if (array_key_exists('_token', $data)) {
             unset($data['_token']);
         }
-        $result = (new TeamspeakHelper())->updateConfiguration($server, $data);
+        (new TeamspeakHelper())->updateConfiguration($server, $data);
 
         return redirect()->action('ServerController@show', $server)->with('success', 'Server successfully updated');
     }

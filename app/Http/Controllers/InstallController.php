@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Hash;
 
 class InstallController extends Controller
 {
-
-    public function __construct(){
-        if(User::count()){
-            return redirect()->action('DashboardController@index')->with('error', 'There is already an existing user. Can\'t reinitate install');
+    public function __construct()
+    {
+        if (User::count()) {
+            return redirect()
+                ->action('DashboardController@index')
+                ->with('error', 'There is already an existing user. Can\'t reinitate install');
         }
     }
 
@@ -27,8 +29,10 @@ class InstallController extends Controller
     {
         $data = $request->all();
         $data['password'] = Hash::make($data['password']);
-        $user = User::create($data);
+        User::create($data);
 
-        return redirect()->action('DashboardController@index')->with('success', 'Installation has been completed');
+        return redirect()
+            ->action('DashboardController@index')
+            ->with('success', 'Installation has been completed');
     }
 }
