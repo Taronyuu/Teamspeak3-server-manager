@@ -1,5 +1,7 @@
 # Teamspeak 3 server manager
 
+[![Laravel Version](https://shield.with.social/cc/github/Taronyuu/Teamspeak3-server-manager/master.svg)](https://packagist.org/packages/laravel/framework)
+
 ### What is it?
 Teamspeak 3 server manager is a simple web application built on Laravel to let users manage their own Teamspeak servers. Its currently fairly new and it still needs allot of work. But the basics are working.
 
