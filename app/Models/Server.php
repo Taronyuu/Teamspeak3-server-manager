@@ -23,7 +23,7 @@ class Server extends Model
 
     public function getStatusAttribute()
     {
-        if(is_null($this->status)){
+        if (is_null($this->status)) {
             $this->status = $this->getStatus();
         }
         return $this->status;

@@ -43,7 +43,7 @@ class ResetTeamspeakServer extends Command
     public function handle()
     {
         $serverInstance = $this->teamspeak->getInstance();
-        foreach($serverInstance as $virtualServer){
+        foreach ($serverInstance as $virtualServer) {
             $serverInstance->serverStop([
                 'sid'   => $virtualServer['virtualserver_id'],
             ]);
@@ -52,6 +52,6 @@ class ResetTeamspeakServer extends Command
             ]);
         }
 
-        $servers = Server::truncate();
+        Server::truncate();
     }
 }

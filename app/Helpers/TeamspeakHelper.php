@@ -7,12 +7,13 @@ use App\Models\Token;
 
 class TeamspeakHelper
 {
-    private $server;
     private $instance;
 
     public function __construct()
     {
+        // @codingStandardsIgnoreStart
         $this->instance = \TeamSpeak3::factory("serverquery://" . env('TS_USERNAME') .":" . env('TS_PASSWORD') . "@" . env('TS_SERVER_IP') . ":" . env('TS_SERVER_PORT'));
+        // @codingStandardsIgnoreEnd
     }
 
     public function getInstance()
@@ -20,8 +21,11 @@ class TeamspeakHelper
         return $this->instance;
     }
 
-    public function server(Server $server){
+    public function server(Server $server)
+    {
+        // @codingStandardsIgnoreStart
         return \TeamSpeak3::factory("serverquery://" . env('TS_USERNAME') .":" . env('TS_PASSWORD') . "@" . env('TS_SERVER_IP') . ":" . env('TS_SERVER_PORT') . "/?server_port=" . $server->port . "&use_offline_as_virtual=1");
+        // @codingStandardsIgnoreEnd
     }
 
     public function createServer(Server $server)
@@ -39,7 +43,7 @@ class TeamspeakHelper
         $server = $this->server($server);
         $result = $server->getProperty("virtualserver_status");
 
-        if($result == 'online'){
+        if ($result == 'online') {
             return true;
         }
         return false;
