@@ -10,6 +10,8 @@ NC='\033[0m'
 
 abort()
 {
+    # Remove DB
+    #rm database/database.sqlite
     echo >&2 "
 ${RED}********************
 *** BUILD FAILED ***
@@ -44,7 +46,7 @@ echo >&2 "${CYAN}PHPUnit${NC}"
 vendor/bin/phpunit
 
 # Remove DB
-#rm database/database.sqlite
+rm database/database.sqlite
 
 trap : 0
 
@@ -53,3 +55,4 @@ ${GREEN}********************
 *** BUILD PASSED ***
 ********************
 ${NC}"
+

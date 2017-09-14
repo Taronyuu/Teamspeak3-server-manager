@@ -24,7 +24,7 @@ class ServerController extends Controller
      */
     public function index()
     {
-        $servers = Server::latest()->paginate();
+        $servers = Server::latest()->paginate(10);
 
         return view('pages.servers.index', compact('servers'));
     }
@@ -48,13 +48,24 @@ class ServerController extends Controller
      */
     public function store(ServerRequest $request)
     {
+        try {
+            $teamspeakServer = $this->teamspeak->createServer($request);
+        } catch (\Exception $exception) {
+            if ($exception->getMessage() == 'virtualserver limit reached') {
+                flash("You have reached the virtual server limit for your license.")->error();
+            } else {
+                flash("Something went wrong creating that virtual server.")->error();
+            }
+
+            return redirect()->route('servers.index');
+        }
+
         $server = Server::create($request->all());
-        $teamspeakServer = $this->teamspeak->createServer($server);
 
         $data = [
             'sid' => $teamspeakServer['sid'],
             'port' => $teamspeakServer['virtualserver_port'],
-            'ip' => env('TS_SERVER_IP')
+            'ip' => config('teamspeak.ip'),
         ];
 
         $server->update($data);
@@ -66,20 +77,20 @@ class ServerController extends Controller
 
         Token::create($tokenData);
 
-        return redirect()->action('ServerController@index')->with('success', 'Server successfully created');
+        flash("Server successfully created!")->success();
+
+        return redirect()->route('servers.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param Server $server
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Server $server)
     {
-        $server = Server::findOrFail($id);
-
         $virtualServer = (new TeamspeakHelper())->getServer($server);
         $viewer = $virtualServer->getViewer(new \TeamSpeak3_Viewer_Html(
             "/images/viewer/",
@@ -94,14 +105,12 @@ class ServerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param  Server $server
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Server $server)
     {
-        $server = Server::findOrFail($id);
-
         return view('pages.servers.edit', compact('server'));
     }
 
@@ -109,58 +118,64 @@ class ServerController extends Controller
      * Update the specified resource in storage.
      *
      * @param \App\Http\Requests\ServerRequest $request
-     * @param  int                             $id
+     * @param  Server $server
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(ServerRequest $request, $id)
+    public function update(ServerRequest $request, Server $server)
     {
-        $server = Server::findOrFail($id);
         $server->update($request->all());
+
         $this->teamspeak->updateServer($server);
 
-        return redirect()->action('ServerController@show', $server)->with('success', 'Server has been edited');
+        flash("Server has been edited.")->success();
+
+        return redirect()->route('servers.show', $server);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param Server $server
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Server $server)
     {
-        $server = Server::findOrFail($id);
-
+        // @TODO - We can remove this check? We stop and delete the server anyway...
         if ($server->status) {
-            return redirect()->back()->with('error', 'Can\'t delete your server when it is running');
+            flash("Can't delete your server when it is running.")->error();
+
+            return back();
         }
 
         $this->teamspeak->stopServer($server);
         $this->teamspeak->deleteServer($server);
         $server->delete();
 
-        return redirect()->action('ServerController@index')->with('success', 'Server has been deleted');
+        flash("Server has been deleted.")->success();
+
+        return redirect()->route('servers.index');
     }
 
-    public function start($id)
+    public function start(Server $server)
     {
-        $server = Server::findOrFail($id);
-
         if ($server->status) {
-            return redirect()->back()->with('error', 'Can\'t start a running server');
+            flash("Server is already running.")->error();
+
+            return back();
         }
 
         (new TeamspeakHelper())->startServer($server);
 
-        return redirect()->back()->with('success', 'Server has been started');
+        flash("Server has been started.")->success();
+
+        return back();
     }
 
-    public function restart($id)
+    public function restart(Server $server)
     {
-        $server = Server::findOrFail($id);
-        $teamspeak = new TeamspeakHelper();
+        $teamspeak = new TeamspeakHelper;
 
         if ($server->status) {
             $teamspeak->stopServer($server);
@@ -168,58 +183,58 @@ class ServerController extends Controller
 
         $teamspeak->startServer($server);
 
+        flash("Server has been started.")->success();
 
-        return redirect()->back()->with('success', 'Server has been started');
+        return back();
     }
 
-    public function stop($id)
+    public function stop(Server $server)
     {
-        $server = Server::findOrFail($id);
+        if (! $server->status) {
+            flash("Server is already stopped.")->error();
 
-        if (!$server->status) {
-            return redirect()->back()->with('error', 'Can\'t stop a server that isn\'t running');
+            return back();
         }
 
         (new TeamspeakHelper())->stopServer($server);
 
-        return redirect()->back()->with('success', 'Server has been stopped');
+        flash("Server has been stopped")->success();
+
+        return back();
     }
 
-    public function resetToken($id)
+    public function resetToken(Server $server)
     {
-        $server = Server::findOrFail($id);
-
         $token = (new TeamspeakHelper())->resetToken($server);
         $data = [
             'server_id' => $server->id,
-            'token' => $token
+            'token' => $token,
         ];
         $token = Token::create($data);
 
-        return redirect()->action('ServerController@showTokens', $server)->with('success', 'Token has been created');
+        flash()->overlay("<kbd>{$token->token}</kbd>", 'Token Generated!');
+
+        return redirect()->route('servers.show_tokens', $server);
     }
 
-    public function showTokens($id)
+    public function showTokens(Server $server)
     {
-        $server = Server::findOrFail($id);
-        $tokens = $server->tokens;
-
-        return view('pages.servers.tokens', compact('tokens', 'server'));
+        return view('pages.servers.tokens', compact('server'));
     }
 
-    public function deleteToken($id, $token_id)
+    public function deleteToken(Server $server, Token $token)
     {
-        $server = Server::findOrFail($id);
-        $token = Token::findOrFail($token_id);
         (new TeamspeakHelper())->deleteToken($server, $token);
+
         $token->delete();
 
-        return redirect()->back()->with('success', 'Token has been deleted');
+        flash("Token has been deleted.")->success();
+
+        return back();
     }
 
-    public function showConfigure($id)
+    public function showConfigure(Server $server)
     {
-        $server = Server::findOrFail($id);
         $virtualServer = (new TeamspeakHelper())->getServer($server);
 
         $serverData = [
@@ -236,15 +251,20 @@ class ServerController extends Controller
         return view('pages.servers.configure', compact('server', 'virtualServer', 'serverData'));
     }
 
-    public function postConfigure($id, Request $request)
+    public function postConfigure(Request $request, Server $server)
     {
-        $server = Server::findOrFail($id);
-        $data = $request->all();
-        if (array_key_exists('_token', $data)) {
-            unset($data['_token']);
-        }
+        $data = $request->except('_token');
+
+        // Laravel sets empty inputs as null so we need empty string for TS3.
+        // @TODO This best? I would remove the middleware but it's good to have.
+        $data = array_map(function ($value) {
+            return (is_null($value) ? '' : $value);
+        }, $data);
+
         (new TeamspeakHelper())->updateConfiguration($server, $data);
 
-        return redirect()->action('ServerController@show', $server)->with('success', 'Server successfully updated');
+        flash("Server settings updated successfully.")->success();
+
+        return redirect()->route('servers.show', $server);
     }
 }

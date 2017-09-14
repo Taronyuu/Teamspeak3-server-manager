@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
-use App\Helpers\TeamspeakHelper;
+use App\Helpers\TeamSpeakHelper;
 use Illuminate\Database\Eloquent\Model;
 
 class Server extends Model
 {
-    protected $table = "servers";
-
     protected $fillable = [
         'sid',
         'name',
         'ip',
         'port',
-        'slots'
+        'slots',
     ];
 
     protected $perPage = 20;
@@ -26,14 +24,16 @@ class Server extends Model
         if (is_null($this->status)) {
             $this->status = $this->getStatus();
         }
+
         return $this->status;
     }
 
     public function getStatus()
     {
-        $ts3 = new TeamspeakHelper();
+        $ts3 = new TeamspeakHelper;
         $result = $ts3->getStatus($this);
         $this->status = $result;
+
         return $result;
     }
 

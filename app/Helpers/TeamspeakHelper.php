@@ -2,10 +2,11 @@
 
 namespace App\Helpers;
 
-use App\Models\Server;
 use App\Models\Token;
+use App\Models\Server;
+use Illuminate\Http\Request;
 
-class TeamspeakHelper
+class TeamSpeakHelper
 {
     private $instance;
 
@@ -28,11 +29,11 @@ class TeamspeakHelper
         // @codingStandardsIgnoreEnd
     }
 
-    public function createServer(Server $server)
+    public function createServer(Request $request)
     {
         $new_sid = $this->instance->serverCreate([
-            'virtualserver_name'        => $server->name,
-            'virtualserver_maxclients'  => $server->slots,
+            'virtualserver_name' => $request->name,
+            'virtualserver_maxclients' => $request->slots,
         ]);
 
         return $new_sid;
@@ -46,6 +47,7 @@ class TeamspeakHelper
         if ($result == 'online') {
             return true;
         }
+
         return false;
     }
 
@@ -62,8 +64,8 @@ class TeamspeakHelper
     {
         $virtualServer = $this->server($server);
         $result = $virtualServer->modify([
-            'virtualserver_name'        => $server->name,
-            'virtualserver_maxclients'  => $server->slots,
+            'virtualserver_name' => $server->name,
+            'virtualserver_maxclients' => $server->slots,
         ]);
 
         return $result;
@@ -92,30 +94,35 @@ class TeamspeakHelper
         $virtualServer = $this->server($server);
         $arr_ServerGroup = $virtualServer->serverGroupGetByName("Server Admin");
         $token = $arr_ServerGroup->privilegeKeyCreate();
+
         return $token;
     }
 
     public function deleteToken(Server $server, Token $token)
     {
         $virtualServer = $this->server($server);
+
         return $virtualServer->privilegeKeyDelete($token->token);
     }
 
     public function updateConfiguration(Server $server, $data)
     {
         $server = $this->server($server);
+
         return $server->modify($data);
     }
 
     public function getOnlineUsers(Server $server)
     {
         $server = $this->server($server);
+
         return $server->clientCount();
     }
 
     public function getServer($server)
     {
         $server = $this->server($server);
+
         return $server;
     }
 }

@@ -1,54 +1,47 @@
-# Teamspeak 3 server manager
+# TeamSpeak 3 Server Manager
 
-[![Laravel Version](https://shield.with.social/cc/github/Taronyuu/Teamspeak3-server-manager/master.svg)](https://packagist.org/packages/laravel/framework)
+[![Laravel Version](https://shield.with.social/cc/github/Taronyuu/Teamspeak3-server-manager/master.svg?style=flat-square)](https://packagist.org/packages/laravel/framework)
 
 ### What is it?
-Teamspeak 3 server manager is a simple web application built on Laravel to let users manage their own Teamspeak servers. Its currently fairly new and it still needs allot of work. But the basics are working.
+TeamSpeak 3 Server Manager is a simple web application built on Laravel to let users manage their own TeamSpeak servers.
+It's been re-written in Laravel 5.5 LTS and still needs a lot of work done but the basics are there.
 
 ### What does it do?
-Right now it lets you create, delete and edit servers. You can start, stop and restart them. Edit their configuration. Create and delete tokens. And check how many people are online. All from your own server.
+Right now it lets you create, delete and edit servers. You can start, stop and restart them. Edit their configuration.
+Create and delete tokens. And check how many people are online.
 
 ### Requirements
-Its built on Laravel 5.1 LTS. So atleast PHP 5.5.9. You also need a webserver. If it isn't local you should make sure your teamspeak server's query port is exposed to the internet. (Recommended is to run it locally)
+It's built on Laravel 5.5 LTS so check the requirements from their site [https://laravel.com/docs/5.5#server-requirements](https://laravel.com/docs/5.5#server-requirements), plus;
+1. TeamSpeak 3 server
+2. Web server (nginx, Apache, or similar)
 
 ### Installation
-The setup is pretty simple:
-- Clone this repo somewhere (Make sure you have git installed, or download the zip)
+1. Clone or download this repo
     `git clone https://github.com/Taronyuu/Teamspeak3-server-manager.git`
-- Set the required values in the `.env` file. You can copy them from the `.env.example` file. (Create the `.env` file if it does not exist by copying the `.env.example` file)
-
-
-    TS_USERNAME=serveradmin
-    TS_PASSWORD={Your serveradmin password}
-    TS_SERVER_IP=127.0.0.1
-    TS_SERVER_PORT=10011
-
-- Run composer install
+2. Setup your environment vars using `.env` or similar (Apache vars, php-fpm vars). You can copy the `.env.example` file.
+3. Run composer install
     `composer install`
-- Install a teamspeak server somewhere and start it. Doing this is outside the scope of this readme file.
--   Make sure `DB_CONNECTION=sqlite` is set to sqlite!
--   Create an empty file named `database.sqlite` in the storage folder. (so `storage/database.sqlite`). If you are on Linux use `touch storage/database.sqlite`.
--   Run `php artisan migrate:refresh` to update the sqlite file with the right columns
--   Run `php artisan teamspeak:reset` to remove all existing Teamspeak servers. This is because at the moment there is no sync option. ***THIS DOES REMOVE ALL EXISTING SERVERS.***
--   Go to `yoururl.com/install` and create a new user.
--   Click on an item in the left sidebar and you will be asked to login.
--   Login
--   Enjoy
+4. Make sure `DB_CONNECTION` is set to sqlite!
+5. Create an empty file named `database.sqlite` in the database folder. `database/database.sqlite`.
+6. Run `php artisan migrate` to migrate the database
+7. Install or make sure your TeamSpeak 3 server is running. Doing this is outside the scope of this readme file.
+8. Run `php artisan teamspeak:sync` to sync the virtual servers and settings into the system.
+9. Go to the URL you have setup and you should be able to register your new account.
+10. Enjoy
 
-### Additional commands
+### TeamSpeak Commands
 We provide a small number of commands which you can use to complete your panel.
 
 Command: `php artisan teamspeak:reset`
-Description: **DANGEROUS** command, this will remove **all** your teamspeak server from the teamspeak 3 instance and database.
+Description: **DANGEROUS** command, this will remove **all** your TeamSpeak server from the TeamSpeak 3 instance and database.
 
-Command: `php artisan teamspeak:sync`
-Description: This command will synchronize all the servers with your database and the teamspeak 3 instance itself.
+Command: `php artisan teamspeak:sync`   
+Description: This command will synchronize all the servers with your database and the TeamSpeak 3 instance itself.
 
-### Can you add.... ?
-Ofcourse! Please open an issue or send me a message. I'll be more than happy to add features whenever I have time. :)
+### Can you add....?
+Of course! Please open an issue. we'll be more than happy to add/discuss features. :)
 
-### Screens
-
-![Server overview](https://snapr.pw/i/86e627f677.png "Server overview")
+### Screens (TO UPDATE)
+![Server Overview](https://snapr.pw/i/86e627f677.png "Server Overview")
 
 ![Menu](https://snapr.pw/i/bd64f1594e.png "Menu")
