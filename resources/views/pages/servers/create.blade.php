@@ -1,32 +1,35 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('page_title', 'Create server')
 
 @section('content')
-    {!! Form::open(['action' => 'ServerController@store', 'method' => 'post', 'role' => 'form']) !!}
-    <div class="row">
-        @include('partials.messages')
-        <div class="col-md-6">
-            <div class="form-group">
-                {!! Form::label('name', 'Server name') !!}
-                {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Server name...', 'required' => 'true']) !!}
+    {{ html()->form('POST', route('servers.store'))->attribute('role', 'form')->open() }}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ html()->label('Server Name', 'name') }}
+                    {{ html()->text('name')->class('form-control')->placeholder('Server name...')->required() }}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                {!! Form::label('slots', 'Slots') !!}
-                {!! Form::number('slots', null, ['class' => 'form-control', 'placeholder' => 4, 'steps' => 1]) !!}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ html()->label('Slots', 'slots') }}
+                    {{ html()->input('number', 'slots')->class('form-control')->placeholder('4')->attribute('min', '1')->attribute('max', '9999')->attribute('steps', '1') }}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary', 'style' => 'width: 100%']) !!}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ html()->button('Save', 'submit')->class('btn btn-primary btn-block') }}
+                </div>
             </div>
         </div>
-    </div>
-    {!! Form::close() !!}
+
+    {{ html()->form()->close() }}
 @endsection

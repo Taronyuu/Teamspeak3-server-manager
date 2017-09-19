@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Token;
-use App\Models\Server;
 use Carbon\Carbon;
+use App\Models\Server;
 use Illuminate\Console\Command;
 use App\Helpers\TeamspeakHelper;
 
@@ -22,19 +21,21 @@ class SynchronizeTeamspeak extends Command
      *
      * @var string
      */
-    protected $description = 'Synchronize Teamspeak 3 servers with your instance and database.';
+    protected $description = 'Synchronize TeamSpeak 3 servers with your instance and database.';
 
     protected $teamspeak;
 
     /**
      * Create a new command instance.
      *
-     * @param \App\Console\Commands\TeamspeakHelper $teamspeak
+     * @param  TeamSpeakHelper $teamSpeakHelper
+     * @return void
      */
-    public function __construct(TeamspeakHelper $teamspeak)
+    public function __construct(TeamSpeakHelper $teamSpeakHelper)
     {
         parent::__construct();
-        $this->teamspeak = $teamspeak;
+
+        $this->teamspeak = $teamSpeakHelper;
     }
 
     /**
@@ -45,6 +46,7 @@ class SynchronizeTeamspeak extends Command
     public function handle()
     {
         $serverInstance = $this->teamspeak->getInstance();
+
         foreach ($serverInstance as $key => $virtualServer) {
             /* @var $virtualServer \TeamSpeak3_Node_Server */
 
@@ -54,7 +56,7 @@ class SynchronizeTeamspeak extends Command
             /*
              * If the server does not exist in our database.
              */
-            if (!$server) {
+            if (! $server) {
                 $slots = 0;
                 $created = Carbon::now();
                 $tokens = [];

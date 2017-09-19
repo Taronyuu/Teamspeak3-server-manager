@@ -10,6 +10,8 @@ NC='\033[0m'
 
 abort()
 {
+    # Remove DB
+    #rm database/database.sqlite
     echo >&2 "
 ${RED}********************
 *** BUILD FAILED ***
@@ -53,3 +55,4 @@ ${GREEN}********************
 *** BUILD PASSED ***
 ********************
 ${NC}"
+

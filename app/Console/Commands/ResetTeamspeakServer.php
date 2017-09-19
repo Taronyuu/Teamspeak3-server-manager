@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Helpers\TeamspeakHelper;
 use App\Models\Server;
 use Illuminate\Console\Command;
+use App\Helpers\TeamspeakHelper;
 
 class ResetTeamspeakServer extends Command
 {
@@ -20,19 +20,21 @@ class ResetTeamspeakServer extends Command
      *
      * @var string
      */
-    protected $description = '[DANGEROUS]Removes all existing Teamspeak server in your instance';
+    protected $description = '[DANGEROUS]Removes all existing TeamSpeak 3 servers in your instance.';
 
     protected $teamspeak;
 
     /**
      * Create a new command instance.
      *
+     * @param  TeamSpeakHelper $teamSpeakHelper
      * @return void
      */
-    public function __construct(TeamspeakHelper $teamspeak)
+    public function __construct(TeamSpeakHelper $teamSpeakHelper)
     {
         parent::__construct();
-        $this->teamspeak = $teamspeak;
+
+        $this->teamspeak = $teamSpeakHelper;
     }
 
     /**
@@ -43,10 +45,12 @@ class ResetTeamspeakServer extends Command
     public function handle()
     {
         $serverInstance = $this->teamspeak->getInstance();
+
         foreach ($serverInstance as $virtualServer) {
             $serverInstance->serverStop([
                 'sid'   => $virtualServer['virtualserver_id'],
             ]);
+
             $serverInstance->serverDelete([
                 'sid'   => $virtualServer['virtualserver_id'],
             ]);

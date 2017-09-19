@@ -1,32 +1,35 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('page_title', 'Edit server')
 
 @section('content')
-    {!! Form::model($server, ['action' => ['ServerController@update', $server], 'method' => 'put', 'role' => 'form']) !!}
-    <div class="row">
-        @include('partials.messages')
-        <div class="col-md-6">
-            <div class="form-group">
-                {!! Form::label('name', 'Server name') !!}
-                {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Server name...', 'required' => 'true']) !!}
+    {{ html()->modelForm($server, 'PUT', route('servers.update', $server))->attribute('role', 'form')->open() }}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ html()->label('Server Name', 'name') }}
+                    {{ html()->text('name')->class('form-control')->placeholder('Server Name')->required() }}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                {!! Form::label('slots', 'Slots') !!}
-                {!! Form::number('slots', null, ['class' => 'form-control', 'placeholder' => 4, 'steps' => 1]) !!}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ html()->label('slots', 'Slots') }}
+                    {{ html()->input('number', 'slots')->class('form-control')->placeholder('4')->attribute('steps', '1') }}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary', 'style' => 'width: 100%']) !!}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ html()->submit('Save')->class('btn btn-primary btn-block') }}
+                </div>
             </div>
         </div>
-    </div>
-    {!! Form::close() !!}
+
+    {{ html()->closeModelForm() }}
 @endsection
