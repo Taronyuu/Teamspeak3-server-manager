@@ -125,4 +125,18 @@ class TeamSpeakHelper
 
         return $server;
     }
+
+    public function getClientList($server)
+    {
+        $server = $this->server($server)->clientList();
+
+        return $server;
+    }
+
+    public function clientPoke($server, $clientId, $message)
+    {
+        $server = $this->server($server)->clientPoke($clientId, $message);
+
+        return $server;
+    }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use EloquentFilter\Filterable;
 use App\Helpers\TeamSpeakHelper;
 use Illuminate\Database\Eloquent\Model;
 
 class Server extends Model
 {
+    use Filterable;
+
     protected $fillable = [
         'sid',
         'name',

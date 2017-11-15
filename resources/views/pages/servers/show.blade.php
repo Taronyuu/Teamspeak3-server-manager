@@ -41,6 +41,12 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
+                    <a href="{{ route('servers.players', $server) }}" class="btn btn-block btn-primary">
+                        View players
+                    </a>
+
+                    <hr />
+
                     {!! $viewer !!}
                 </div>
             </div>

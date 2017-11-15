@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlayerMessageRequest;
 use App\Models\Token;
 use App\Models\Server;
 use Illuminate\Http\Request;
@@ -156,6 +157,20 @@ class ServerController extends Controller
         flash("Server has been deleted.")->success();
 
         return redirect()->route('servers.index');
+    }
+
+    public function players(Server $server)
+    {
+        $players = (new TeamspeakHelper())->getClientList($server);
+
+        return view('pages.servers.players', compact('server', 'players'));
+    }
+
+    public function sendPlayerMessage(PlayerMessageRequest $request, Server $server, $player)
+    {
+        (new TeamspeakHelper())->clientPoke($server, $player, $request->input('message'));
+
+        return redirect()->back();
     }
 
     public function start(Server $server)

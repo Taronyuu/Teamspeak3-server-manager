@@ -6,7 +6,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', 'DashboardController@index')->name('index');
 
     Route::resource('servers', 'ServerController');
-    Route::name('servers.')->group(function () {
+    Route::group(['as' => 'servers.'], function () {
+        Route::get('servers/{server}/players', 'ServerController@players')->name('players');
+        Route::post('servers/{server}/players/{player}/message', 'ServerController@sendPlayerMessage')->name('players.message');
         Route::get('servers/{server}/start', 'ServerController@start')->name('start');
         Route::get('servers/{server}/restart', 'ServerController@restart')->name('restart');
         Route::get('servers/{server}/stop', 'ServerController@stop')->name('stop');
