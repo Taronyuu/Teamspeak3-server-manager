@@ -13,7 +13,7 @@ class TeamSpeakHelper
     public function __construct()
     {
         // @codingStandardsIgnoreStart
-        $this->instance = \TeamSpeak3::factory("serverquery://" . env('TS_USERNAME') .":" . env('TS_PASSWORD') . "@" . env('TS_SERVER_IP') . ":" . env('TS_SERVER_PORT'));
+        $this->instance = \TeamSpeak3::factory('serverquery://' . env('TS_USERNAME') . ':' . env('TS_PASSWORD') . '@' . env('TS_SERVER_IP') . ':' . env('TS_SERVER_PORT'));
         // @codingStandardsIgnoreEnd
     }
 
@@ -25,15 +25,15 @@ class TeamSpeakHelper
     public function server(Server $server)
     {
         // @codingStandardsIgnoreStart
-        return \TeamSpeak3::factory("serverquery://" . env('TS_USERNAME') .":" . env('TS_PASSWORD') . "@" . env('TS_SERVER_IP') . ":" . env('TS_SERVER_PORT') . "/?server_port=" . $server->port . "&use_offline_as_virtual=1");
+        return \TeamSpeak3::factory('serverquery://' . env('TS_USERNAME') . ':' . env('TS_PASSWORD') . '@' . env('TS_SERVER_IP') . ':' . env('TS_SERVER_PORT') . '/?server_port=' . $server->port . '&use_offline_as_virtual=1');
         // @codingStandardsIgnoreEnd
     }
 
     public function createServer(Request $request)
     {
         $new_sid = $this->instance->serverCreate([
-            'virtualserver_name' => $request->name,
-            'virtualserver_maxclients' => $request->slots,
+            'virtualserver_name' => $request->input('name'),
+            'virtualserver_maxclients' => $request->input('slots'),
         ]);
 
         return $new_sid;
@@ -42,7 +42,7 @@ class TeamSpeakHelper
     public function getStatus(Server $server)
     {
         $server = $this->server($server);
-        $result = $server->getProperty("virtualserver_status");
+        $result = $server->getProperty('virtualserver_status');
 
         if ($result == 'online') {
             return true;
@@ -54,7 +54,7 @@ class TeamSpeakHelper
     public function deleteServer(Server $server)
     {
         $result = $this->instance->serverDelete([
-            'sid'   => $server->sid
+            'sid' => $server->sid
         ]);
 
         return $result;
@@ -89,10 +89,10 @@ class TeamSpeakHelper
         return $result;
     }
 
-    public function resetToken(Server $server, $channel = "Server Admin")
+    public function resetToken(Server $server, $channel = 'Server Admin')
     {
         $virtualServer = $this->server($server);
-        $arr_ServerGroup = $virtualServer->serverGroupGetByName("Server Admin");
+        $arr_ServerGroup = $virtualServer->serverGroupGetByName('Server Admin');
         $token = $arr_ServerGroup->privilegeKeyCreate();
 
         return $token;
