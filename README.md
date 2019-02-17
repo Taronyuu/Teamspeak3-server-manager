@@ -41,7 +41,15 @@ Description: This command will synchronize all the servers with your database an
 ### Can you add....?
 Of course! Please open an issue. we'll be more than happy to add/discuss features. :)
 
-### Screens (TO UPDATE)
-![Server Overview](https://snapr.pw/i/86e627f677.png "Server Overview")
-
-![Menu](https://snapr.pw/i/bd64f1594e.png "Menu")
+### Screens:
+#### Log in:
+![Log in](https://snapr.pw/i/59df643509.png "Log in")
+#### Dashboard:
+![Dashboard](https://snapr.pw/i/9054ea0fa0.png "Dashboard")
+#### Servers list:
+![Servers list](https://snapr.pw/i/d0c971ccf1.png "Servers list")
+#### Server overview:
+![Server overview v1](https://snapr.pw/i/14920dcb75.png "Server overview v1")
+![Server overview v2](https://snapr.pw/i/b9db69baf5.png "Server overview v2")
+#### Create server:
+![Create server](https://snapr.pw/i/527944c590.png "Create server")
